@@ -1,7 +1,9 @@
+using ToDoListAPI.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoListAPI.data;
 using ToDoListAPI.model;
+
 
 namespace ToDoListAPI.Controllers
 {
@@ -18,45 +20,107 @@ namespace ToDoListAPI.Controllers
 
         // GET api/todolist
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ToDoList>>> GetLists()
+        public async Task<ActionResult<IEnumerable<ToDoListDTO>>> GetLists()
         {
-            return await _context.ToDoLists
+            var lists = await _context.ToDoLists
                 .Include(l => l.Activities)
                 .ToListAsync();
+
+            var dto = lists.Select(l => new ToDoListDTO
+            {
+                Id = l.Id,
+                Name = l.Name,
+                Activities = l.Activities.Select(a => new TaskActivityDTO
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Description = a.Description,
+                    DueDate = a.DueDate,
+                    IsCompleted = a.IsCompleted,
+                    ToDoListId = a.ToDoListId
+                }).ToList()
+            });
+
+            return Ok(dto);
         }
 
         // GET api/todolist/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ToDoList>> GetList(int id)
+        public async Task<ActionResult<ToDoListDTO>> GetList(int id)
         {
             var list = await _context.ToDoLists
                 .Include(l => l.Activities)
                 .FirstOrDefaultAsync(l => l.Id == id);
 
             if (list == null) return NotFound();
-            return list;
+
+            var dto = new ToDoListDTO
+            {
+                Id = list.Id,
+                Name = list.Name,
+                Activities = list.Activities.Select(a => new TaskActivityDTO
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Description = a.Description,
+                    DueDate = a.DueDate,
+                    IsCompleted = a.IsCompleted,
+                    ToDoListId = a.ToDoListId
+                }).ToList()
+            };
+
+            return Ok(dto);
         }
 
         // POST api/todolist
         [HttpPost]
-        public async Task<ActionResult<ToDoList>> CreateList(ToDoList list)
+        public async Task<ActionResult<ToDoListDTO>> CreateList(CreateToDoListDTO dto)
         {
+            var list = new ToDoList
+            {
+                Name = dto.Name,
+                CreatedAt = DateTime.UtcNow
+            };
+
             _context.ToDoLists.Add(list);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetList), new { id = list.Id }, list);
+            var result = new ToDoListDTO
+            {
+                Id = list.Id,
+                Name = list.Name,
+                Activities = new List<TaskActivityDTO>()
+            };
+
+            return CreatedAtAction(nameof(GetList), new { id = list.Id }, result);
         }
 
         // PUT api/todolist/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateList(int id, ToDoList list)
+        public async Task<ActionResult<ToDoListDTO>> UpdateList(int id, UpdateToDoListDTO dto)
         {
-            if (id != list.Id) return BadRequest();
+            var list = await _context.ToDoLists.Include(l => l.Activities).FirstOrDefaultAsync(l => l.Id == id);
+            if (list == null) return NotFound();
 
-            _context.Entry(list).State = EntityState.Modified;
+            list.Name = dto.Name;
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            var result = new ToDoListDTO
+            {
+                Id = list.Id,
+                Name = list.Name,
+                Activities = list.Activities.Select(a => new TaskActivityDTO
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Description = a.Description,
+                    DueDate = a.DueDate,
+                    IsCompleted = a.IsCompleted,
+                    ToDoListId = a.ToDoListId
+                }).ToList()
+            };
+
+            return Ok(result);
         }
 
         // DELETE api/todolist/5

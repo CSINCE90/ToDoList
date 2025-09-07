@@ -12,10 +12,10 @@ namespace ToDoListAPI.model
 
         [Required]
         [MaxLength(120)]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [MaxLength(1000)]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         public DateTime? DueDate { get; set; }
 
@@ -29,7 +29,7 @@ namespace ToDoListAPI.model
 
         public int ToDoListId { get; set; }
 
-        public ToDoList ToDoList { get; set; }
+        public ToDoList ToDoList { get; set; } = null!;
     }
 }
 
