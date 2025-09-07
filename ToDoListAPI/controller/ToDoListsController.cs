@@ -1,3 +1,4 @@
+using ToDoListAPI.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoListAPI.data;
@@ -39,8 +40,14 @@ namespace ToDoListAPI.Controllers
 
         // POST api/todolist
         [HttpPost]
-        public async Task<ActionResult<ToDoList>> CreateList(ToDoList list)
+        public async Task<ActionResult<ToDoList>> CreateList(CreateToDoListDTO dto)
         {
+            var list = new ToDoList
+            {
+                Name = dto.Name,
+                CreatedAt = DateTime.UtcNow
+            };
+
             _context.ToDoLists.Add(list);
             await _context.SaveChangesAsync();
 
@@ -49,11 +56,12 @@ namespace ToDoListAPI.Controllers
 
         // PUT api/todolist/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateList(int id, ToDoList list)
+        public async Task<IActionResult> UpdateList(int id, UpdateToDoListDTO dto)
         {
-            if (id != list.Id) return BadRequest();
+            var list = await _context.ToDoLists.FindAsync(id);
+            if (list == null) return NotFound();
 
-            _context.Entry(list).State = EntityState.Modified;
+            list.Name = dto.Name;
             await _context.SaveChangesAsync();
 
             return NoContent();

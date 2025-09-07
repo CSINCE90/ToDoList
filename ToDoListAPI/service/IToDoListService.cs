@@ -13,3 +13,5 @@ namespace ToDoListAPI.service
         Task<bool> DeleteAsync(int id);
     }
 }
+
+//THIS IS THE INTERFACE FOR THE TO DO LIST SERVICE

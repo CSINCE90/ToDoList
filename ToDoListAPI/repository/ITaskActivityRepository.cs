@@ -16,3 +16,5 @@ namespace ToDoListAPI.repository
         Task SaveChangesAsync();
     }
 }
+
+//THIS IS THE REPOSITORY INTERFACE FOR TASKACTIVITY MODEL 

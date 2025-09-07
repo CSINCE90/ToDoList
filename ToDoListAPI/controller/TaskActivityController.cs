@@ -1,3 +1,4 @@
+using ToDoListAPI.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoListAPI.data;
@@ -34,8 +35,17 @@ namespace ToDoListAPI.Controllers
 
         // POST api/taskactivity
         [HttpPost]
-        public async Task<ActionResult<TaskActivity>> CreateTask(TaskActivity task)
+        public async Task<ActionResult<TaskActivity>> CreateTask(CreateTaskActivityDTO dto)
         {
+            var task = new TaskActivity
+            {
+                Title = dto.Title,
+                Description = dto.Description,
+                DueDate = dto.DueDate,
+                ToDoListId = dto.ToDoListId,
+                CreatedAt = DateTime.UtcNow
+            };
+
             _context.TaskActivities.Add(task);
             await _context.SaveChangesAsync();
 
@@ -44,12 +54,17 @@ namespace ToDoListAPI.Controllers
 
         // PUT api/taskactivity/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTask(int id, TaskActivity task)
+        public async Task<IActionResult> UpdateTask(int id, UpdateTaskActivityDTO dto)
         {
-            if (id != task.Id) return BadRequest();
+            var task = await _context.TaskActivities.FindAsync(id);
+            if (task == null) return NotFound();
 
+            task.Title = dto.Title;
+            task.Description = dto.Description;
+            task.DueDate = dto.DueDate;
+            task.IsCompleted = dto.IsCompleted;
             task.UpdatedAt = DateTime.UtcNow;
-            _context.Entry(task).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
 
             return NoContent();

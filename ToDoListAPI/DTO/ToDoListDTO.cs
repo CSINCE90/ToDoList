@@ -14,4 +14,25 @@ namespace ToDoListAPI.DTO
         [MaxLength(100)]
         public string Name { get; set; } = string.Empty;
     }
+    public class CreateToDoListDTO
+    {
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; } = string.Empty;
+    }
+
+    public class UpdateToDoListDTO
+    {
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; } = string.Empty;
+    }
 }
+
+// DTO (Data Transfer Objects) for ToDoList
+// - ToDoListDTO: Used to return a ToDoList from the API (includes Id and Name).
+// - CreateToDoListDTO: Used when creating a new ToDoList. Only requires the Name property.
+// - UpdateToDoListDTO: Used when updating an existing ToDoList. Only requires the Name property.
+// 
+// These classes separate the API contract from the database entity,
+// ensuring that clients only send/receive the data that makes sense for each operation.

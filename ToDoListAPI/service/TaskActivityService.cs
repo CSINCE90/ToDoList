@@ -63,3 +63,7 @@ namespace ToDoListAPI.service
         }
     }
 }
+
+    // Service class for TaskActivity.
+    // Handles business logic for managing TaskActivity entities,
+    // including create, read, update, and soft delete operations.

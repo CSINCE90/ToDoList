@@ -14,3 +14,5 @@ namespace ToDoListAPI.service
         Task<bool> SoftDeleteAsync(int id);
     }
 }
+
+//THIS IS THE INTERFACE FOR TASKACTIVITY SERVICE 
