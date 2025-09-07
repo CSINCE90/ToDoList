@@ -29,7 +29,7 @@ namespace ToDoListAPI.model
 
         public int ToDoListId { get; set; }
 
-        public ToDoList ToDoList { get; set; }
+        public ToDoList ToDoList { get; set; } = null!;
     }
 }
 
