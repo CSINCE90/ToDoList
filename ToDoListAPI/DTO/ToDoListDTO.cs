@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using ToDoListAPI.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoListAPI.data;
@@ -13,6 +15,8 @@ namespace ToDoListAPI.DTO
         [Required]
         [MaxLength(100)]
         public string Name { get; set; } = string.Empty;
+        // List of tasks associated with this ToDoList
+        public List<TaskActivityDTO> Activities { get; set; } = new();
     }
     public class CreateToDoListDTO
     {

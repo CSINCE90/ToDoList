@@ -7,6 +7,7 @@
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/ToDoListAPI.pdb
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/Azure.Core.dll
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/Azure.Identity.dll
+/Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/DotNetEnv.dll
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/Humanizer.dll
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/Microsoft.AspNetCore.OpenApi.dll
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/Microsoft.Bcl.AsyncInterfaces.dll
@@ -35,6 +36,7 @@
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/Mono.TextTemplating.dll
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/MySqlConnector.dll
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/Pomelo.EntityFrameworkCore.MySql.dll
+/Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/Sprache.dll
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -138,5 +140,3 @@
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/obj/Debug/net8.0/ToDoListAPI.pdb
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/obj/Debug/net8.0/ToDoListAPI.genruntimeconfig.cache
 /Users/francescochifari/Desktop/ToDoList/ToDoListAPI/obj/Debug/net8.0/ref/ToDoListAPI.dll
-/Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/DotNetEnv.dll
-/Users/francescochifari/Desktop/ToDoList/ToDoListAPI/bin/Debug/net8.0/Sprache.dll
