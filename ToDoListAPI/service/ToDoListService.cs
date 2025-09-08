@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ToDoListAPI.data;
@@ -48,8 +49,17 @@ namespace ToDoListAPI.service
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var existing = await _context.ToDoLists.FindAsync(id);
+            var existing = await _context.ToDoLists
+                .Include(x => x.Activities)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
             if (existing == null) return false;
+
+            if (existing.Activities.Any())
+            {
+                // Prevent delete when there are existing activities due to Restrict
+                return false;
+            }
 
             _context.ToDoLists.Remove(existing);
             await _context.SaveChangesAsync();
@@ -57,6 +67,4 @@ namespace ToDoListAPI.service
         }
     }
 }
-    // Service class for TaskActivity.
-    // Handles business logic for managing TaskActivity entities,
-    // including create, read, update, and soft delete operations.
+    // Service class for ToDoList: CRUD with safety on delete.

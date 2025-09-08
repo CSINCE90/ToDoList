@@ -1,2 +1,16 @@
 # Environment variables
 .env
+ToDoListAPI/.env
+
+# Build outputs
+**/bin/
+**/obj/
+
+# Visual Studio/VSCode
+.vs/
+*.user
+*.suo
+.vscode/
+
+# Others
+*.DS_Store

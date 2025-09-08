@@ -1,8 +1,8 @@
 using ToDoListAPI.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ToDoListAPI.data;
 using ToDoListAPI.model;
+using ToDoListAPI.service;
+using System.Linq;
 
 namespace ToDoListAPI.Controllers
 {
@@ -10,32 +10,34 @@ namespace ToDoListAPI.Controllers
     [Route("api/[controller]")]
     public class TaskActivityController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ITaskActivityService _service;
 
-        public TaskActivityController(AppDbContext context)
+        public TaskActivityController(ITaskActivityService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET api/taskactivity
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskActivity>>> GetTasks()
+        public async Task<ActionResult<IEnumerable<TaskActivityDTO>>> GetTasks()
         {
-            return await _context.TaskActivities.ToListAsync();
+            var tasks = await _service.GetAllAsync();
+            var dto = tasks.Select(MapToDto);
+            return Ok(dto);
         }
 
         // GET api/taskactivity/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TaskActivity>> GetTask(int id)
+        public async Task<ActionResult<TaskActivityDTO>> GetTask(int id)
         {
-            var task = await _context.TaskActivities.FindAsync(id);
+            var task = await _service.GetByIdAsync(id);
             if (task == null) return NotFound();
-            return task;
+            return Ok(MapToDto(task));
         }
 
         // POST api/taskactivity
         [HttpPost]
-        public async Task<ActionResult<TaskActivity>> CreateTask(CreateTaskActivityDTO dto)
+        public async Task<ActionResult<TaskActivityDTO>> CreateTask(CreateTaskActivityDTO dto)
         {
             var task = new TaskActivity
             {
@@ -46,27 +48,25 @@ namespace ToDoListAPI.Controllers
                 CreatedAt = DateTime.UtcNow
             };
 
-            _context.TaskActivities.Add(task);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
+            var created = await _service.CreateAsync(task);
+            var result = MapToDto(created);
+            return CreatedAtAction(nameof(GetTask), new { id = result.Id }, result);
         }
 
         // PUT api/taskactivity/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(int id, UpdateTaskActivityDTO dto)
         {
-            var task = await _context.TaskActivities.FindAsync(id);
-            if (task == null) return NotFound();
+            var task = new TaskActivity
+            {
+                Title = dto.Title,
+                Description = dto.Description,
+                DueDate = dto.DueDate,
+                IsCompleted = dto.IsCompleted
+            };
 
-            task.Title = dto.Title;
-            task.Description = dto.Description;
-            task.DueDate = dto.DueDate;
-            task.IsCompleted = dto.IsCompleted;
-            task.UpdatedAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-
+            var updated = await _service.UpdateAsync(id, task);
+            if (!updated) return NotFound();
             return NoContent();
         }
 
@@ -74,14 +74,19 @@ namespace ToDoListAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {
-            var task = await _context.TaskActivities.FindAsync(id);
-            if (task == null) return NotFound();
-
-            task.IsDeleted = true;
-            task.UpdatedAt = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
-
+            var deleted = await _service.SoftDeleteAsync(id);
+            if (!deleted) return NotFound();
             return NoContent();
         }
+
+        private static TaskActivityDTO MapToDto(TaskActivity a) => new TaskActivityDTO
+        {
+            Id = a.Id,
+            Title = a.Title,
+            Description = a.Description,
+            DueDate = a.DueDate,
+            IsCompleted = a.IsCompleted,
+            ToDoListId = a.ToDoListId
+        };
     }
 }
