@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ToDoListAPI.model
 
 {
-    [Table("ToDoList")]
     public class ToDoList
     {
         public int Id { get; set; }
@@ -18,7 +17,7 @@ namespace ToDoListAPI.model
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public ICollection<TaskActivity> Activities { get; set; } = new List<TaskActivity>();
-    }
+}
 
 
 }
