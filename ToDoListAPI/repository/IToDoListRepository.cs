@@ -14,6 +14,7 @@ namespace ToDoListAPI.repository
         Task UpdateAsync(ToDoList list);
         Task DeleteAsync(ToDoList list);
         Task SaveChangesAsync();
+        Task<(IEnumerable<ToDoList> Items, int Total)> GetFilteredAsync(string? search, DateTime? from, DateTime? to, int page, int pageSize);
     }
 }
 

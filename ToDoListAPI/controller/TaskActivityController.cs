@@ -19,19 +19,19 @@ namespace ToDoListAPI.Controllers
 
         // GET api/taskactivity
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskActivityDTO>>> GetTasks()
+        [ProducesResponseType(typeof(PagedResult<TaskActivityDTO>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PagedResult<TaskActivityDTO>>> GetTasks([FromQuery] int? toDoListId, [FromQuery] DateTime? from, [FromQuery] DateTime? to, [FromQuery] bool? isCompleted, [FromQuery] string? q, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
-            var tasks = await _service.GetAllAsync();
-            var dto = tasks.Select(MapToDto);
-            return Ok(dto);
+            var (items, total) = await _service.GetFilteredAsync(toDoListId, from, to, isCompleted, q, page, pageSize);
+            var dto = items.Select(MapToDto);
+            return Ok(new PagedResult<TaskActivityDTO>(dto, total, page, pageSize));
         }
 
         // GET api/taskactivity/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TaskActivityDTO>> GetTask(int id)
         {
-            var task = await _service.GetByIdAsync(id);
-            if (task == null) return NotFound();
+            var task = await _service.GetByIdAsync(id); // throw NotFound
             return Ok(MapToDto(task));
         }
 
@@ -48,7 +48,7 @@ namespace ToDoListAPI.Controllers
                 CreatedAt = DateTime.UtcNow
             };
 
-            var created = await _service.CreateAsync(task);
+            var created = await _service.CreateAsync(task); // throws Validation/NotFound
             var result = MapToDto(created);
             return CreatedAtAction(nameof(GetTask), new { id = result.Id }, result);
         }
@@ -65,8 +65,7 @@ namespace ToDoListAPI.Controllers
                 IsCompleted = dto.IsCompleted
             };
 
-            var updated = await _service.UpdateAsync(id, task);
-            if (!updated) return NotFound();
+            await _service.UpdateAsync(id, task); // throw NotFound/Validation
             return NoContent();
         }
 
@@ -74,8 +73,7 @@ namespace ToDoListAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {
-            var deleted = await _service.SoftDeleteAsync(id);
-            if (!deleted) return NotFound();
+            await _service.SoftDeleteAsync(id); // throw NotFound
             return NoContent();
         }
 

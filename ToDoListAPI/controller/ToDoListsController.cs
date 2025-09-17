@@ -20,19 +20,19 @@ namespace ToDoListAPI.Controllers
 
         // GET api/todolist
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ToDoListDTO>>> GetLists()
+        [ProducesResponseType(typeof(PagedResult<ToDoListDTO>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PagedResult<ToDoListDTO>>> GetLists([FromQuery] string? search, [FromQuery] DateTime? from, [FromQuery] DateTime? to, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
-            var lists = await _service.GetAllAsync();
-            var dto = lists.Select(MapToDto);
-            return Ok(dto);
+            var (items, total) = await _service.GetFilteredAsync(search, from, to, page, pageSize);
+            var dtoItems = items.Select(MapToDto);
+            return Ok(new PagedResult<ToDoListDTO>(dtoItems, total, page, pageSize));
         }
 
         // GET api/todolist/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ToDoListDTO>> GetList(int id)
         {
-            var list = await _service.GetByIdAsync(id);
-            if (list == null) return NotFound();
+            var list = await _service.GetByIdAsync(id); // eccezioni gestite dal filtro globale
             return Ok(MapToDto(list));
         }
 
@@ -46,7 +46,7 @@ namespace ToDoListAPI.Controllers
                 CreatedAt = DateTime.UtcNow
             };
 
-            var created = await _service.CreateAsync(list);
+            var created = await _service.CreateAsync(list); // throw ValidationException se invalido
             var result = MapToDto(created);
             return CreatedAtAction(nameof(GetList), new { id = result.Id }, result);
         }
@@ -56,19 +56,14 @@ namespace ToDoListAPI.Controllers
         public async Task<ActionResult<ToDoListDTO>> UpdateList(int id, UpdateToDoListDTO dto)
         {
             var updated = await _service.UpdateAsync(id, new ToDoList { Name = dto.Name });
-            if (!updated) return NotFound();
-
-            var list = await _service.GetByIdAsync(id);
-            if (list == null) return NotFound();
-            return Ok(MapToDto(list));
+            return Ok(MapToDto(updated));
         }
 
-        // DELETE api/todolist/5
+        /// <summary> @param id </summary> 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteList(int id)
         {
-            var deleted = await _service.DeleteAsync(id);
-            if (!deleted) return Conflict("Cannot delete list with existing activities or list not found.");
+            await _service.DeleteAsync(id); // throw NotFound/Conflict
             return NoContent();
         }
 

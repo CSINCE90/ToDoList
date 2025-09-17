@@ -21,7 +21,7 @@ namespace ToDoListAPI.model
 
         public bool IsCompleted { get; set; } = false;
 
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;//soft delete
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

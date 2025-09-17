@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ToDoListAPI.data;
 using ToDoListAPI.service;
 using ToDoListAPI.repository;
+using ToDoListAPI.Filters;
 using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,11 +19,15 @@ var password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "";
 var connectionString = $"server={server};port={port};database={database};user={user};password={password}";
 
 // Add services to the container
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    // Gestione globale delle eccezioni di dominio -> ProblemDetails
+    options.Filters.Add<ApiExceptionFilter>();
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Database
+// Database (AutoDetect richiede il DB attivo; semplice e immediato)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 

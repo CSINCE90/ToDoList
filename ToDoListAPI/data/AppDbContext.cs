@@ -24,10 +24,13 @@ namespace ToDoListAPI.data
                 entity.HasKey(x => x.Id);
                 entity.Property(x => x.Name).IsRequired().HasMaxLength(100);
                 entity.Property(x => x.CreatedAt);
+                entity.Property(x => x.IsDeleted).HasDefaultValue(false);
                 entity.HasMany(x => x.Activities)
                       .WithOne(x => x.ToDoList)
                       .HasForeignKey(x => x.ToDoListId)
                       .OnDelete(DeleteBehavior.Restrict);
+                // Global filter: non mostra liste soft-deleted
+                entity.HasQueryFilter(x => !x.IsDeleted);
             });
 
             modelBuilder.Entity<TaskActivity>(entity =>

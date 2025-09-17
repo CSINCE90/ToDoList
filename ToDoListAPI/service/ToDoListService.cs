@@ -1,70 +1,70 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using ToDoListAPI.data;
 using ToDoListAPI.model;
+using ToDoListAPI.repository;
+using ToDoListAPI.Exceptions;
 
 namespace ToDoListAPI.service
 {
     public class ToDoListService : IToDoListService
     {
-        private readonly AppDbContext _context;
+        private readonly IToDoListRepository _repo;
 
-        public ToDoListService(AppDbContext context)
+        public ToDoListService(IToDoListRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
-        public async Task<IEnumerable<ToDoList>> GetAllAsync()
-        {
-            return await _context.ToDoLists
-                .Include(l => l.Activities)
-                .ToListAsync();
-        }
+        public Task<IEnumerable<ToDoList>> GetAllAsync() => _repo.GetAllAsync();
 
-        public async Task<ToDoList?> GetByIdAsync(int id)
+        public async Task<ToDoList> GetByIdAsync(int id)
         {
-            return await _context.ToDoLists
-                .Include(l => l.Activities)
-                .FirstOrDefaultAsync(l => l.Id == id);
+            var list = await _repo.GetByIdAsync(id);
+            if (list == null) throw new NotFoundException($"List {id} not found.");
+            return list;
         }
 
         public async Task<ToDoList> CreateAsync(ToDoList list)
         {
-            _context.ToDoLists.Add(list);
-            await _context.SaveChangesAsync();
+            if (list == null) throw new ValidationException("List payload is required.");
+            if (string.IsNullOrWhiteSpace(list.Name))
+                throw new ValidationException("List name is required.");
+
+            await _repo.AddAsync(list);
+            await _repo.SaveChangesAsync();
             return list;
         }
 
-        public async Task<bool> UpdateAsync(int id, ToDoList list)
+        public async Task<ToDoList> UpdateAsync(int id, ToDoList input)
         {
-            var existing = await _context.ToDoLists.FindAsync(id);
-            if (existing == null) return false;
+            var existing = await _repo.GetByIdAsync(id);
+            if (existing == null) throw new NotFoundException($"List {id} not found.");
 
-            existing.Name = list.Name;
-            await _context.SaveChangesAsync();
-            return true;
+            if (input == null) throw new ValidationException("List payload is required.");
+            if (!string.IsNullOrWhiteSpace(input.Name)) existing.Name = input.Name;
+
+            await _repo.UpdateAsync(existing);
+            await _repo.SaveChangesAsync();
+            return existing;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            var existing = await _context.ToDoLists
-                .Include(x => x.Activities)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var existing = await _repo.GetByIdAsync(id);
+            if (existing == null) throw new NotFoundException($"List {id} not found.");
+            // Soft delete: marca la lista come eliminata, senza rimuovere record
+            existing.IsDeleted = true;
+            await _repo.UpdateAsync(existing);
+            await _repo.SaveChangesAsync();
+        }
 
-            if (existing == null) return false;
-
-            if (existing.Activities.Any())
-            {
-                // Prevent delete when there are existing activities due to Restrict
-                return false;
-            }
-
-            _context.ToDoLists.Remove(existing);
-            await _context.SaveChangesAsync();
-            return true;
+        public async Task<(IEnumerable<ToDoList> Items, int Total)> GetFilteredAsync(string? search, System.DateTime? from, System.DateTime? to, int page, int pageSize)
+        {
+            if (page < 1) throw new ValidationException("page must be >= 1");
+            if (pageSize < 1 || pageSize > 100) throw new ValidationException("pageSize must be between 1 and 100");
+            return await _repo.GetFilteredAsync(search, from, to, page, pageSize);
         }
     }
 }
-    // Service class for ToDoList: CRUD with safety on delete.
+    // Service class for ToDoList: uses repository, applies business rules, throws domain exceptions.

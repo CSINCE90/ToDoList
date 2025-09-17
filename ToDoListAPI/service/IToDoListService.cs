@@ -7,10 +7,11 @@ namespace ToDoListAPI.service
     public interface IToDoListService
     {
         Task<IEnumerable<ToDoList>> GetAllAsync();
-        Task<ToDoList?> GetByIdAsync(int id);
+        Task<ToDoList> GetByIdAsync(int id);
         Task<ToDoList> CreateAsync(ToDoList list);
-        Task<bool> UpdateAsync(int id, ToDoList list);
-        Task<bool> DeleteAsync(int id);
+        Task<ToDoList> UpdateAsync(int id, ToDoList list);
+        Task DeleteAsync(int id);
+        Task<(IEnumerable<ToDoList> Items, int Total)> GetFilteredAsync(string? search, DateTime? from, DateTime? to, int page, int pageSize);
     }
 }
 
