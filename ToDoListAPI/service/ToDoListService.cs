@@ -7,6 +7,10 @@ using ToDoListAPI.Exceptions;
 
 namespace ToDoListAPI.service
 {
+
+    /// <summary>
+    /// Service for ToDoList
+    /// </summary>  
     public class ToDoListService : IToDoListService
     {
         private readonly IToDoListRepository _repo;

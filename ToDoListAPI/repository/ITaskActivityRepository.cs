@@ -6,6 +6,9 @@ using ToDoListAPI.model;
 
 namespace ToDoListAPI.repository
 {
+    /// <summary>
+    /// Interface for TaskActivityRepository
+    /// </summary>
     public interface ITaskActivityRepository
     {
         Task<IEnumerable<TaskActivity>> GetAllAsync();

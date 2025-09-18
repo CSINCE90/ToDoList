@@ -12,6 +12,9 @@ using ToDoListAPI.repository;
 
 namespace ToDoListAPI.service
 {
+    /// <summary>
+    /// Service for TaskActivity
+    /// </summary>
     public class TaskActivityService : ITaskActivityService
     {
         private readonly ITaskActivityRepository _tasks;

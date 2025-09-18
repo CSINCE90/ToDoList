@@ -14,3 +14,7 @@ ToDoListAPI/.env
 
 # Others
 *.DS_Store
+
+#.txt file
+infoUpgrade.txt
+ToDoList/

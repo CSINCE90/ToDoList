@@ -10,6 +10,9 @@ using System.Linq;
 
 namespace ToDoListAPI.repository
 {
+    /// <summary>
+    /// Repository for TaskActivity
+    /// </summary>
     public class TaskActivityRepository : ITaskActivityRepository
     {
         private readonly AppDbContext _context;

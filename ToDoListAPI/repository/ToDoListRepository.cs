@@ -8,8 +8,12 @@ using System.Linq;
 
 namespace ToDoListAPI.repository
 {
+    /// <summary>
+    /// Repository for ToDoList
+    /// </summary>
     public class ToDoListRepository : IToDoListRepository
     {
+
         private readonly AppDbContext _context;
 
         public ToDoListRepository(AppDbContext context)
