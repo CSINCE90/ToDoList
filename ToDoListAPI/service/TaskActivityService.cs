@@ -1,19 +1,13 @@
-//SERVICE   
-
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using ToDoListAPI.data;
-using ToDoListAPI.model;
-using ToDoListAPI.Exceptions;
-using ToDoListAPI.repository;
 using ToDoListAPI.DTO;
-
+using ToDoListAPI.Exceptions;
+using ToDoListAPI.model;
+using ToDoListAPI.repository;
 
 namespace ToDoListAPI.service
 {
-   
     public class TaskActivityService : ITaskActivityService
     {
         private readonly ITaskActivityRepository _tasks;
@@ -52,16 +46,28 @@ namespace ToDoListAPI.service
             return task;
         }
 
-        public async Task<TaskActivity> UpdateAsync(int id, TaskActivity input)
+        public async Task<TaskActivity> UpdateAsync(int id, UpdateTaskActivityDTO input)
         {
             var existing = await _tasks.GetByIdAsync(id);
             if (existing == null) throw new NotFoundException($"Task {id} not found.");
             if (input == null) throw new ValidationException("Task payload is required.");
 
-            if (!string.IsNullOrWhiteSpace(input.Title)) existing.Title = input.Title;
-            existing.Description = input.Description ?? existing.Description;
-            existing.DueDate = input.DueDate;
-            existing.IsCompleted = input.IsCompleted;
+            if (input.Title != null)
+            {
+                if (string.IsNullOrWhiteSpace(input.Title))
+                    throw new ValidationException("Task title cannot be empty.");
+                existing.Title = input.Title;
+            }
+
+            if (input.Description != null)
+                existing.Description = input.Description;
+
+            if (input.DueDate.HasValue)
+                existing.DueDate = input.DueDate;
+
+            if (input.IsCompleted.HasValue)
+                existing.IsCompleted = input.IsCompleted.Value;
+
             existing.UpdatedAt = DateTime.UtcNow;
 
             await _tasks.UpdateAsync(existing);
@@ -87,11 +93,6 @@ namespace ToDoListAPI.service
             if (page < 1) throw new ValidationException("page must be >= 1");
             if (pageSize < 1 || pageSize > 100) throw new ValidationException("pageSize must be between 1 and 100");
             return await _tasks.GetFilteredAsync(toDoListId, from, to, isCompleted, q, page, pageSize);
-        }
-
-        public Task<TaskActivity> UpdateAsync(int id, UpdateTaskActivityDTO task)
-        {
-            throw new NotImplementedException();
         }
     }
 }
