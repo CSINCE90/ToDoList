@@ -7,6 +7,9 @@ using ToDoListAPI.model;
 
 namespace ToDoListAPI.data
 {
+    /// <summary>
+    /// DbContext EF Core che definisce le entità dell'applicazione e la loro configurazione.
+    /// </summary>
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }

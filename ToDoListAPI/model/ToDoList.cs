@@ -6,6 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ToDoListAPI.model
 
 {
+    /// <summary>
+    /// Rappresenta una lista di attività con metadati e raccolta di task associati.
+    /// </summary>
     public class ToDoList
     {
         public int Id { get; set; }

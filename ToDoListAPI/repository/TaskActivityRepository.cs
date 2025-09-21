@@ -11,7 +11,7 @@ using System.Linq;
 namespace ToDoListAPI.repository
 {
     /// <summary>
-    /// Repository for TaskActivity
+    /// Implementa l'accesso ai dati per le attività, includendo filtri dinamici e paging.
     /// </summary>
     public class TaskActivityRepository : ITaskActivityRepository
     {

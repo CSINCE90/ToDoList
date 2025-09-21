@@ -9,6 +9,9 @@ namespace ToDoListAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    /// <summary>
+    /// Gestisce gli endpoint REST per CRUD e ricerca paginata delle liste to-do.
+    /// </summary>
     public class ToDoListsController : ControllerBase
     {
         private readonly IToDoListService _service;

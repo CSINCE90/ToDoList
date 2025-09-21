@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ToDoListAPI.DTO
 {
+    /// <summary>
+    /// DTO per esporre le informazioni principali di una TaskActivity tramite API.
+    /// </summary>
     public class TaskActivityDTO
     {
         public int Id { get; set; }

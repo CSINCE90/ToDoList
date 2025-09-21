@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ToDoListAPI.DTO
 {
+    /// <summary>
+    /// Modello di input per creare una nuova attività collegata a una specifica lista.
+    /// </summary>
     public class CreateTaskActivityDTO
     {
         [Required]

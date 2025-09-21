@@ -8,13 +8,12 @@ using ToDoListAPI.data;
 using ToDoListAPI.model;
 using ToDoListAPI.Exceptions;
 using ToDoListAPI.repository;
+using ToDoListAPI.DTO;
 
 
 namespace ToDoListAPI.service
 {
-    /// <summary>
-    /// Service for TaskActivity
-    /// </summary>
+   
     public class TaskActivityService : ITaskActivityService
     {
         private readonly ITaskActivityRepository _tasks;
@@ -82,13 +81,17 @@ namespace ToDoListAPI.service
             await _tasks.SaveChangesAsync();
         }
 
-        // Opzionale: filtri + paging già pronti in repo/interfaccia
         public async Task<(IEnumerable<TaskActivity> Items, int Total)> GetFilteredAsync(
             int? toDoListId, DateTime? from, DateTime? to, bool? isCompleted, string? q, int page, int pageSize)
         {
             if (page < 1) throw new ValidationException("page must be >= 1");
             if (pageSize < 1 || pageSize > 100) throw new ValidationException("pageSize must be between 1 and 100");
             return await _tasks.GetFilteredAsync(toDoListId, from, to, isCompleted, q, page, pageSize);
+        }
+
+        public Task<TaskActivity> UpdateAsync(int id, UpdateTaskActivityDTO task)
+        {
+            throw new NotImplementedException();
         }
     }
 }

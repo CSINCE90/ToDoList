@@ -3,7 +3,7 @@ using System;
 namespace ToDoListAPI.Exceptions
 {
     /// <summary>
-    /// Exception for not found
+    /// Indica che la risorsa richiesta non è stata individuata dal sistema.
     /// </summary>
     public class NotFoundException : Exception
     {

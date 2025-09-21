@@ -7,7 +7,7 @@ using ToDoListAPI.model;
 namespace ToDoListAPI.repository
 {
     /// <summary>
-    /// Interface for ToDoListRepository
+    /// Definisce la contract per interrogare e mutare le entità ToDoList nel database.
     /// </summary>
     public interface IToDoListRepository
     {

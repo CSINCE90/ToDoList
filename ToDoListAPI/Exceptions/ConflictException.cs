@@ -3,7 +3,7 @@ using System;
 namespace ToDoListAPI.Exceptions
 {
     /// <summary>
-    /// Exception for conflict
+    /// Segnala conflitti di dominio, come violazioni di vincoli o stati non compatibili.
     /// </summary>
     public class ConflictException : Exception
     {

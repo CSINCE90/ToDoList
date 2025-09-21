@@ -9,7 +9,7 @@ namespace ToDoListAPI.service
 {
 
     /// <summary>
-    /// Service for ToDoList
+    /// Coordina la logica applicativa per la gestione delle to-do list e del loro stato.
     /// </summary>  
     public class ToDoListService : IToDoListService
     {

@@ -8,6 +8,9 @@ namespace ToDoListAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    /// <summary>
+    /// Espone gli endpoint per consultare e gestire le attività appartenenti alle liste.
+    /// </summary>
     public class TaskActivityController : ControllerBase
     {
         private readonly ITaskActivityService _service;
@@ -25,7 +28,7 @@ namespace ToDoListAPI.Controllers
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <param name="isCompleted"></param>
-        /// <param name="q"></param>
+        /// <param name="description"></param>
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
@@ -114,15 +117,7 @@ namespace ToDoListAPI.Controllers
         [ProducesResponseType(typeof(TaskActivityDTO), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateTask(int id, UpdateTaskActivityDTO dto)
         {
-            var task = new TaskActivity
-            {
-                Title = dto.Title,
-                Description = dto.Description,
-                DueDate = dto.DueDate,
-                IsCompleted = dto.IsCompleted
-            };
-
-            await _service.UpdateAsync(id, task); // throw NotFound/Validation
+            await _service.UpdateAsync(id, dto); // throw NotFound/Validation
             return NoContent();
         }
 

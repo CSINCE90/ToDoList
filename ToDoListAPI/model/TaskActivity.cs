@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ToDoListAPI.model
 {
+    /// <summary>
+    /// Definisce un'attività appartenente a una lista, con descrizione, scadenza e stato.
+    /// </summary>
     public class TaskActivity
     {
         public int Id { get; set; }

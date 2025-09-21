@@ -8,9 +8,7 @@ using System.Linq;
 
 namespace ToDoListAPI.repository
 {
-    /// <summary>
-    /// Repository for ToDoList
-    /// </summary>
+ 
     public class ToDoListRepository : IToDoListRepository
     {
 

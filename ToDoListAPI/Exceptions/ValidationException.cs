@@ -3,7 +3,7 @@ using System;
 namespace ToDoListAPI.Exceptions
 {
     /// <summary>
-    /// Exception for validation
+    /// Rappresenta errori di validazione sugli input dell'applicazione.
     /// </summary>
     public class ValidationException : Exception
     {

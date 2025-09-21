@@ -5,7 +5,7 @@ using ToDoListAPI.model;
 namespace ToDoListAPI.service
 {
     /// <summary>
-    /// Interface for ToDoListService
+    /// Definisce le operazioni di business per creare, aggiornare e filtrare le liste.
     /// </summary>
     public interface IToDoListService
     {

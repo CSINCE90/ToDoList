@@ -7,7 +7,7 @@ using ToDoListAPI.model;
 namespace ToDoListAPI.repository
 {
     /// <summary>
-    /// Interface for TaskActivityRepository
+    /// Definisce le operazioni di persistenza e ricerca per le attività della lista.
     /// </summary>
     public interface ITaskActivityRepository
     {
