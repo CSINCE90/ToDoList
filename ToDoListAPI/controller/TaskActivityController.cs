@@ -8,9 +8,6 @@ namespace ToDoListAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    /// <summary>
-    /// Espone gli endpoint per consultare e gestire le attività appartenenti alle liste.
-    /// </summary>
     public class TaskActivityController : ControllerBase
     {
         private readonly ITaskActivityService _service;
@@ -24,18 +21,6 @@ namespace ToDoListAPI.Controllers
         /// <summary>
         /// Retrieves paginated to-do lists optionally filtered by name and creation date.
         /// </summary>
-        /// <param name="toDoListId"></param>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <param name="isCompleted"></param>
-        /// <param name="description"></param>
-        /// <param name="page"></param>
-        /// <param name="pageSize"></param>
-        /// <returns></returns>
-        /// <response code="200">Returns the paginated collection of lists.</response>
-        /// <response code="400">If the request parameters are invalid.</response>
-        /// <response code="404">If the list is not found.</response>
-        /// <response code="500">If an unexpected error occurs.</response>
         [HttpGet]
         [ProducesResponseType(typeof(PagedResult<TaskActivityDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(PagedResult<TaskActivityDTO>), StatusCodes.Status400BadRequest)]
@@ -52,11 +37,6 @@ namespace ToDoListAPI.Controllers
         /// <summary>
         /// Retrieves a single to-do list by its identifier.
         /// </summary>
-        /// <param name="id">Identifier of the list.</param>
-        /// <returns>The requested list if it exists.</returns>
-        /// <response code="200">Returns the requested list.</response>
-        /// <response code="404">If the list is not found.</response>
-        /// <response code="500">If an unexpected error occurs.</response>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(TaskActivityDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(TaskActivityDTO), StatusCodes.Status404NotFound)]
@@ -71,12 +51,6 @@ namespace ToDoListAPI.Controllers
         /// <summary>
         /// Creates a new to-do list.
         /// </summary>
-        /// <param name="dto">Payload containing the list name.</param>
-        /// <returns>The created list.</returns>
-        /// <response code="201">Returns the created list.</response>
-        /// <response code="400">If the request payload is invalid.</response>
-        /// <response code="409">If the list name already exists.</response>
-        /// <response code="500">If an unexpected error occurs.</response>
         [HttpPost]
         [ProducesResponseType(typeof(TaskActivityDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(TaskActivityDTO), StatusCodes.Status400BadRequest)]
@@ -102,13 +76,6 @@ namespace ToDoListAPI.Controllers
         /// <summary>
         /// Updates the name of the list.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        /// <response code="204">Returns no content.</response>
-        /// <response code="404">If the list is not found.</response>
-        /// <response code="409">If the list name already exists.</response>
-        /// <response code="500">If an unexpected error occurs.</response>
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(TaskActivityDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(TaskActivityDTO), StatusCodes.Status400BadRequest)]
@@ -127,9 +94,6 @@ namespace ToDoListAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        /// <response code="204">Returns no content.</response>
-        /// <response code="404">If the list is not found.</response>
-        /// <response code="500">If an unexpected error occurs.</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(TaskActivityDTO), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(TaskActivityDTO), StatusCodes.Status404NotFound)]
@@ -143,8 +107,6 @@ namespace ToDoListAPI.Controllers
         /// <summary>
         /// Maps a TaskActivity to a TaskActivityDTO
         /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
         private static TaskActivityDTO MapToDto(TaskActivity a) => new TaskActivityDTO
         {
             Id = a.Id,

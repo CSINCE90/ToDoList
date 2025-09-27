@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ToDoListAPI.model
 {
-    /// <summary>
-    /// Definisce un'attività appartenente a una lista, con descrizione, scadenza e stato.
-    /// </summary>
+
+    
     public class TaskActivity
     {
         public int Id { get; set; }
@@ -18,22 +14,31 @@ namespace ToDoListAPI.model
         public string Title { get; set; } = string.Empty;
 
         [MaxLength(1000)]
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; }
 
         public DateTime? DueDate { get; set; }
 
         public bool IsCompleted { get; set; } = false;
 
-        public bool IsDeleted { get; set; } = false;//soft delete
+        /// <summary>
+        /// Indica se l'attività è stata eliminata logicamente (soft delete).
+        /// </summary>
+        public bool IsDeleted { get; set; } = false;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+     
+        public DateTime CreatedAt { get; set; }
 
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        /// <summary>
+        /// Data dell'ultimo aggiornamento dell'attività.
+        /// </summary>
+        public DateTime? UpdatedAt { get; set; }
 
+       
+        [Required]
         public int ToDoListId { get; set; }
 
-        public ToDoList ToDoList { get; set; } = null!;
+    
+        [Required]
+        public ToDoList ToDoList { get; set; } = null!; 
     }
 }
-
-//this class is designed with the supermarket shopping list in mind. It can be easily adapted to any activity to be carried out.

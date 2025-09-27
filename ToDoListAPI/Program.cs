@@ -19,11 +19,7 @@ var password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "";
 var connectionString = $"server={server};port={port};database={database};user={user};password={password}";
 
 // Add services to the container
-builder.Services.AddControllers(options =>
-{
-    // Gestione globale delle eccezioni di dominio -> ProblemDetails
-    options.Filters.Add<ApiExceptionFilter>();
-});
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -47,6 +43,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalExceptionHandler>();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
