@@ -1,10 +1,7 @@
-using System.Collections.Generic;
-using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ToDoListAPI.data;
 using ToDoListAPI.model;
-using System.Linq;
+
 
 namespace ToDoListAPI.repository
 {

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ToDoListAPI.data;
 using ToDoListAPI.service;
 using ToDoListAPI.repository;
-using ToDoListAPI.Filters;
+using ToDoListAPI.Middleware;
 using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);

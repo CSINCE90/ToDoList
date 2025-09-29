@@ -1,14 +1,12 @@
-using System;
+namespace ToDoListAPI.Exceptions;
 
-namespace ToDoListAPI.Exceptions
+/// <summary>
+/// Eccezione di dominio lanciata quando si verifica un conflitto con lo stato corrente della risorsa.
+/// Gestita dal <see cref="Middleware.GlobalExceptionHandler"/> restituendo un 409 Conflict.
+/// </summary>
+public class ConflictException : Exception
 {
-    /// <summary>
-    /// Segnala conflitti di dominio, come violazioni di vincoli o stati non compatibili.
-    /// </summary>
-    public class ConflictException : Exception
+    public ConflictException(string message) : base(message)
     {
-        public ConflictException(string message) : base(message) { }
     }
 }
-
-//409 conflict: for example list is not empty 

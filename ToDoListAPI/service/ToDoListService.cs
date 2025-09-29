@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ToDoListAPI.model;
 using ToDoListAPI.repository;
 using ToDoListAPI.Exceptions;
+using ToDoListAPI.Middleware;
 
 namespace ToDoListAPI.service
 {
